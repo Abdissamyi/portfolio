@@ -1,0 +1,8 @@
+{
+  "buildCommand": "echo 'Build complete'",
+  "functions": {
+    "api/send_email.js": {
+      "runtime": "nodejs18.x"
+    }
+  }
+}
