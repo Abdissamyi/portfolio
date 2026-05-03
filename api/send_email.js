@@ -26,6 +26,10 @@ export default async function handler(req, res) {
         return res.status(400).json({ error: "All fields are required" });
     }
 
+    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+        return res.status(500).json({ error: "Email service not configured" });
+    }
+
     try {
         const transporter = nodemailer.createTransport({
             service: "gmail",

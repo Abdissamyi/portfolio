@@ -8,7 +8,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 // Middleware
 app.use(cors());
@@ -16,8 +16,8 @@ app.use(express.json());
 app.use(express.static(__dirname));
 
 // Email configuration
-const EMAIL_USER = "abdissamiaibbaali4@gmail.com";
-const EMAIL_PASS = "hcbojmzcosyohxge";
+const EMAIL_USER = process.env.EMAIL_USER;
+const EMAIL_PASS = process.env.EMAIL_PASS;
 
 // Email transporter
 const transporter = nodemailer.createTransport({

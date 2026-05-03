@@ -1,8 +1,15 @@
 {
-  "buildCommand": "echo 'Build complete'",
-  "functions": {
-    "api/send_email.js": {
-      "runtime": "nodejs18.x"
+  "version": 3,
+  "builds": [
+    {
+      "src": "api/send_email.js",
+      "use": "@vercel/node"
     }
-  }
+  ],
+  "routes": [
+    {
+      "src": "/api/send_email",
+      "dest": "/api/send_email.js"
+    }
+  ]
 }
