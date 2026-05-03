@@ -128,6 +128,7 @@ window.addEventListener('scroll', () => {
 // nodemailer code for sending email from contact form
 document.addEventListener('DOMContentLoaded', () => {
     const contactForm = document.getElementById('contactForm'); // Get the contact form
+    const messageStatus = document.getElementById('message-status'); // Get message status element
     
     if (contactForm) {
         contactForm.addEventListener('submit', async (e) => {
@@ -136,6 +137,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const name = document.getElementById('name').value;
             const email = document.getElementById('email').value;
             const message = document.getElementById('message').value;
+            
+            // Hide any previous messages
+            messageStatus.style.display = 'none';
+            messageStatus.classList.remove('show', 'success', 'error');
             
             try {
                 const response = await fetch("/api/send_email", {
@@ -155,20 +160,41 @@ document.addEventListener('DOMContentLoaded', () => {
                     data = JSON.parse(responseText);
                 } catch (e) {
                     console.error("Failed to parse JSON:", e);
-                    alert("Server error: " + responseText);
+                    showMessage("Server error: " + responseText, 'error');
                     return;
                 }
                 
                 if (response.ok) {
-                    alert("Message sent successfully!");
+                    showMessage("Message sent successfully!", 'success');
                     contactForm.reset();
                 } else {
-                    alert("Error: " + (data.message || data.error || "Unknown error"));
+                    showMessage("Error: " + (data.message || data.error || "Unknown error"), 'error');
                 }
             } catch (error) {
                 console.error("Fetch error:", error);
-                alert("Error sending message: " + error.message);
+                showMessage("Error sending message: " + error.message, 'error');
             }
         });
+    }
+    
+    function showMessage(text, type) {
+        messageStatus.textContent = text;
+        messageStatus.className = `message-status ${type}`;
+        messageStatus.style.display = 'block';
+        
+        // Trigger animation
+        setTimeout(() => {
+            messageStatus.classList.add('show');
+        }, 10);
+        
+        // Auto-hide success messages after 5 seconds
+        if (type === 'success') {
+            setTimeout(() => {
+                messageStatus.classList.remove('show');
+                setTimeout(() => {
+                    messageStatus.style.display = 'none';
+                }, 300);
+            }, 5000);
+        }
     }
 });
